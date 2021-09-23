@@ -367,6 +367,58 @@ class LinkedList{
             tail = obj.getTail();
         }
 
+        void merge(LinkedList obj) {
+            if (head) {
+                Node *q = head, *p = obj.getHead();
+                int q_position = 1;
+                bool isInserted = false;
+                while(p) {
+                    while(q) {
+                        if (p->data < q->data) {
+                            insert(p->data, q_position - 1);
+                            isInserted = true;
+                            break;
+                        }
+                        q = q->next;
+                        q_position++;
+                    }
+                    if (!isInserted) {
+                        insert(p->data, q_position-1);
+                    }
+                    p = p->next;
+                    q = head;
+                    q_position = 1;
+                    isInserted = false;
+                }
+            }
+        }
+
+        bool hasLoop() {
+            // cout << "Ran 1" << endl;
+            Node *p = head, *q = head;
+            do {
+                // cout << "Ran 2" << endl;
+                p = p->next; // P moves one step at a time
+                // cout << "Ran 2a" << endl;
+                q = q->next; // Q moves two steps at a time
+                q = q ? q->next : NULL;
+                // cout << "Ran 2b" << endl;
+                if (p==q) { // If there's a loop inside a LinkedList, both pointers will meet at a certain point, otherwise they wont
+                    return true;
+                    // cout << "Ran 4" << endl;
+                }
+            } while(p && q);
+
+            // cout << "Ran 5" << endl;
+
+            return false; 
+        
+        }
+
+        void __createLoop() {
+            head = tail;
+        }
+
     private:
         void reverse_recursive(Node *current, Node *previous) {
             if (!current) { 
@@ -431,22 +483,9 @@ int main() {
     ll.Add(3);
     ll.Add(5);
     ll.Add(7);
-    ll.Add(12);
-    ll.Add(15);
-    cout << "Displaying first ll " << endl;
-    ll.display2();
+    ll.__createLoop();
 
-    ll_second.Add(88);
-    ll_second.Add(109);
-    ll_second.Add(203);
-    ll_second.Add(89);
-    ll_second.Add(77);
-    ll_second.Add(69);
-    cout << "Displaying second ll " << endl;
-    ll_second.display2();
-
-    cout << endl << "Displaying first after concatenating with second linked list " << endl;
-    ll.display2();
+    cout << "Does it has a loop? " << ll.hasLoop() << endl;
 
     return 0;
 }
