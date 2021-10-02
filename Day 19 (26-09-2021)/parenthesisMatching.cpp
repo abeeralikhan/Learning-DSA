@@ -87,10 +87,6 @@ char nextMatching (char parenthese) {
     case '[':
         return ']';
         break;
-
-    case ' ':
-        return ' ';
-        break;
     }
 
     return ' ';
@@ -104,7 +100,7 @@ bool verify_parenthesis(char *string) {
         if (string[i] == '(' || string[i] == '{' || string[i] == '[') {
             st.Push(string[i]);
             count++;
-        } else {
+        } else if (string[i] == ')' || string[i] == ']' || string[i] == '}') {
             if (string[i] == nextMatching(st.Peek())) {
                 st.Pop();
                 count--; // While popping we have to make sure previously pushed 
@@ -123,9 +119,9 @@ bool verify_parenthesis(char *string) {
 }
 
 int main() {
-    char data[20] = "{[(])}";
+    char data[20] = "(()())";
     
-    cout << "Are parenthesis balanced? --> " << verify_parenthesis(data) << endl;
+    cout << "Are the parenthesis balanced? --> " << verify_parenthesis(data) << endl;
     // verify_parenthesis(data);
     return 0;
 }
